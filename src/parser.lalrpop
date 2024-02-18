@@ -1,0 +1,113 @@
+use crate::ast::*;
+use crate::instr;
+
+grammar;
+
+pub TopLvl: TopLvl = {
+    SingleTopLvl* => {
+        let mut ret = TopLvl {
+            functions: Vec::new(),
+            instrs: Vec::new()
+        };
+        for elem in <> {
+            match elem {
+                TopLvlEnum::Function(name, body) => {
+                    ret.functions.push((name, body));
+                }
+                TopLvlEnum::Instruction(instr) => {
+                    ret.instrs.push(instr);
+                }
+            }
+        }
+        ret
+    }
+}
+
+SingleTopLvl: TopLvlEnum = {
+    Function => TopLvlEnum::Function(<>.0, <>.1),
+    FuncBodyElem => TopLvlEnum::Instruction(<>)
+}
+
+Function: (String, Vec<FuncBody>) = {
+    "FUNC" <name: r"\.\w+"> <body: FuncBody> "END" => {
+        (name.to_string(), body)
+    }
+}
+
+Instruction: Instruction = {
+    r"nop|NOP" => instr!(Nop; Vec::new()),
+    r"inc|INC" <op1: Register> => instr!(Inc; vec![op1]),
+    r"dec|DEC" <op1: Register> => instr!(Dec; vec![op1]),
+    r"add|ADD" <op1: Register> => instr!(Add; vec![op1]),
+    r"adr|ADR" <op1: Register> => instr!(Adr; vec![op1]),
+    r"adc|ADC" <op1: Register> => instr!(Adc; vec![op1]),
+    r"sub|SUB" <op1: Register> => instr!(Sub; vec![op1]),
+    r"sbb|SBB" <op1: Register> => instr!(Sbb; vec![op1]),
+    r"bor|BOR" <op1: Register> => instr!(Bor; vec![op1]),
+    r"and|AND" <op1: Register> => instr!(And; vec![op1]),
+    r"xor|XOR" <op1: Register> => instr!(Xor; vec![op1]),
+    r"lia|LIA" <op1: Immediate> => instr!(Lia; vec![op1]),
+    r"lir|LIR" <op1: Register> <op2: Immediate> => instr!(Lir; vec![op1, op2]),
+    r"rst|RST" <op1: Register> => instr!(Rst; vec![op1]),
+    r"rld|RLD" <op1: Register> => instr!(Rld; vec![op1]),
+    r"cst|CST" <op1: Register> => instr!(Cst; vec![op1]),
+    r"cld|CLD" <op1: Register> => instr!(Cld; vec![op1]),
+    r"cal|CAL" <op1: Label> => instr!(Cal; vec![op1]),
+    r"ret|RET" => instr!(Ret; Vec::new()),
+    r"brc|BRC" <cond: Condition> <dst: Label> => instr!(Brc; vec![cond, dst]),
+    r"cmp|CMP" <op1: Register> => instr!(Cmp; vec![op1]),
+    r"psh|PSH"  => instr!(Psh; Vec::new()),
+    r"pop|POP"  => instr!(Pop; Vec::new()),
+    r"pst|PST" <op1: Address> => instr!(Pst; vec![op1]),
+    r"pld|PLD" <op1: Address> => instr!(Pld; vec![op1]),
+    r"hlt|HLT"  => instr!(Hlt; Vec::new()),
+    r"ics|ICS" <cond: Condition> <dst: Label> => instr!(Ics; vec![cond, dst]),
+}
+
+Register: Operand = {
+    r"(r|R)\d" => {
+        let mut s = <>.to_string();
+        s.remove(0);
+        Operand::Register(s.parse::<u8>().unwrap())
+    }
+}
+
+Immediate: Operand = {
+    r"\d+" => Operand::Immediate(<>.parse::<u8>().unwrap())
+}
+
+Address: Operand = {
+    r"\$\d" => {
+        let mut s = <>.to_string();
+        s.remove(0);
+        Operand::Address(s.parse::<u8>().unwrap())
+    }
+}
+
+Condition: Operand = {
+    r"jmp|JMP" => Operand::Condition(Condition::Jmp),
+    r"even|EVEN" => Operand::Condition(Condition::Even),
+    r"eq|EQ" => Operand::Condition(Condition::Eq),
+    r"neq|NEQ" => Operand::Condition(Condition::Neq),
+    r"gt|GT" => Operand::Condition(Condition::Gt),
+    r"lt|LT" => Operand::Condition(Condition::Lt),
+    r"gteq|GTEQ" => Operand::Condition(Condition::Gteq),
+    r"lteq|LTEQ" => Operand::Condition(Condition::Lteq),
+}
+
+Label: Operand = {
+    r"\.\w+" => Operand::Label(<>.to_string())
+}
+
+FuncBodyElem: FuncBody = {
+    Instruction => FuncBody::Instruction(<>),
+    r"\.\w+" => FuncBody::Label(<>.to_string()),
+    <s: r#"".*""#> => FuncBody::Data({
+        let mut s = s.to_string();
+        s.pop();
+        s.remove(0);
+        s.into()
+    })
+}
+
+FuncBody: Vec<FuncBody> = FuncBodyElem*;
