@@ -116,3 +116,19 @@ impl Display for Condition {
         write!(f, "{}", format!("{:?}", self).to_lowercase())
     }
 }
+
+impl Display for FuncBody {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            FuncBody::Data(d) => {
+                write!(f, "{:?}", d)
+            }
+            FuncBody::Instruction(i) => {
+                write!(f, "{i}")
+            }
+            FuncBody::Label(l) => {
+                write!(f, "{l}")
+            }
+        }
+    }
+}

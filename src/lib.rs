@@ -3,6 +3,7 @@ pub mod ast;
 pub mod lower_labels;
 pub mod name_mangling;
 pub mod parser;
+pub mod romgen;
 
 #[macro_export]
 macro_rules! instr {

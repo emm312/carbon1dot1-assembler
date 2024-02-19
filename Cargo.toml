@@ -9,6 +9,7 @@ edition = "2021"
 clap = { version = "4.5.1", features = ["derive"] }
 codespan-reporting = "0.11.1"
 lalrpop-util = { version = "0.20.0", features = ["lexer"] }
+mcschem = "0.1.1"
 regex = "1.7.9"
 
 [build-dependencies]
