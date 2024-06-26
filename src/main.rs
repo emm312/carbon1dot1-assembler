@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use carbon1dot1_assembler::{
     assembler::assemble, lower_labels::lower_labels, name_mangling::mangle, parser::parse, romgen,
 };
@@ -7,7 +9,7 @@ use clap::Parser;
 struct Args {
     #[clap()]
     input_file: String,
-    #[clap(short, long, default_value_t=String::from("./out.schem"))]
+    #[clap(short, long, default_value_t=String::from("./out.bin"))]
     output_file: String,
 }
 
@@ -39,5 +41,6 @@ fn main() {
     }
     let mut f = std::fs::File::create(args.output_file)
         .expect("Failed to open  the output file.");
-    romgen::generate_schem(&mut f, &assembled, 64).unwrap();
+    f.write_all(&assembled).unwrap();
+    //romgen::generate_schem(&mut f, &assembled, 64).unwrap();
 }
