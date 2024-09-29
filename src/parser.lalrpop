@@ -3,6 +3,52 @@ use crate::instr;
 
 grammar;
 
+match {
+    r"\/.*" => {},
+    "FUNC",
+    r"\.\w+",
+    "END",
+    r"nop|NOP",
+    r"inc|INC",
+    r"dec|DEC",
+    r"add|ADD",
+    r"adr|ADR",
+    r"adc|ADC",
+    r"sub|SUB",
+    r"sbb|SBB",
+    r"bor|BOR",
+    r"and|AND",
+    r"xor|XOR",
+    r"lia|LIA",
+    r"lir|LIR",
+    r"rst|RST",
+    r"rld|RLD",
+    r"cst|CST",
+    r"cld|CLD",
+    r"cal|CAL",
+    r"ret|RET",
+    r"brc|BRC",
+    r"cmp|CMP",
+    r"psh|PSH",
+    r"pop|POP",
+    r"pst|PST",
+    r"pld|PLD",
+    r"hlt|HLT",
+    r"ics|ICS",
+    r"(r|R)\d",
+    r"\d+",
+    r"\$\d",
+    r"jmp|JMP",
+    r"even|EVEN",
+    r"eq|EQ",
+    r"neq|NEQ",
+    r"gt|GT",
+    r"lt|LT",
+    r"gteq|GTEQ",
+    r"lteq|LTEQ",
+    r#"".*""#
+}
+
 pub TopLvl: TopLvl = {
     SingleTopLvl* => {
         let mut ret = TopLvl {

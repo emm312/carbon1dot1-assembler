@@ -20,5 +20,6 @@ FUNC .multiplication
   .end
   RET
 END
+
 CAL .multiplication
 "test"
