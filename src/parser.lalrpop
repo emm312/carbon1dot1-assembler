@@ -5,6 +5,7 @@ grammar;
 
 match {
     r"\/.*" => {},
+    r"\s+" => {},
     "FUNC",
     r"\.\w+",
     "END",
