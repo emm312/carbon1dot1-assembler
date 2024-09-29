@@ -1,5 +1,5 @@
 use crate::{
-    ast::{FuncBody, Operand, TopLvl},
+    ast::{FuncBody, Opcode, Operand, TopLvl},
     instr,
 };
 
@@ -18,7 +18,14 @@ pub fn mangle(module: TopLvl) -> Vec<FuncBody> {
                             *l = format!(".__INNER_FUNC_LABEL{}_{}", name, l);
                         }
                     }
+                    let mut push_nop = false;
+                    if instr.opcode == Opcode::Brc {
+                        push_nop = true;
+                    }
                     ret.push(FuncBody::Instruction(instr));
+                    if push_nop {
+                        ret.push(FuncBody::Instruction(instr!(Nop; vec![])));
+                    }
                 }
                 FuncBody::Label(l) => ret.push(FuncBody::Label(format!(
                     ".__INNER_FUNC_LABEL{}_{}",

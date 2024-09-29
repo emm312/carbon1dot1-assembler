@@ -36,11 +36,8 @@ fn main() {
     //        .join("\n")
     //);
     let assembled = assemble(lowered);
-    if assembled.len() >= 64 {
-        println!("warning: your shit does not fit in one page, good luck")
-    }
     let mut f = std::fs::File::create(args.output_file)
         .expect("Failed to open  the output file.");
     f.write_all(&assembled).unwrap();
-    //romgen::generate_schem(&mut f, &assembled, 64).unwrap();
+    //romgen::generate_schem(&mut f, &assembled, 256).unwrap();
 }

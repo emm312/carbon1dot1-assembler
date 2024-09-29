@@ -1,7 +1,7 @@
 use std::fmt::Display;
 
 #[repr(u8)]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Opcode {
     Nop = 0,
     Inc,
