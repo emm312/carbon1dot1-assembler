@@ -1,4 +1,4 @@
-use crate::ast::{FuncBody, Operand};
+use crate::ast::{FuncBody, Opcode, Operand};
 
 pub fn assemble(instrs: Vec<FuncBody>) -> Vec<u8> {
     let mut ret = Vec::new();
@@ -10,11 +10,16 @@ pub fn assemble(instrs: Vec<FuncBody>) -> Vec<u8> {
                 for operand in instr.operands {
                     match operand {
                         Operand::Immediate(a) => {
-                            if !pushed_opword {
-                                ret.push(word);
+                            if instr.opcode != Opcode::Brc {
+                                if !pushed_opword {
+                                    ret.push(word);
+                                }
+                                pushed_opword = true;
+                                ret.push(a);
+                            } else {
+                                ret.push((a as f32 / 128.).floor() as u8);
+                                ret.push(a % 128-2);
                             }
-                            pushed_opword = true;
-                            ret.push(a);
                         }
                         Operand::Condition(c) => {
                             word |= c as u8;

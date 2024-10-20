@@ -1,7 +1,7 @@
 use std::io::Write;
 
 use carbon1dot1_assembler::{
-    assembler::assemble, lower_labels::lower_labels, name_mangling::mangle, parser::parse, romgen,
+    assembler::assemble, lower_labels::lower_labels, name_mangling::mangle, parser::parse,
 };
 use clap::Parser;
 

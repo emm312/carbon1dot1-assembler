@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::ast::{FuncBody, Operand};
+use crate::ast::{FuncBody, Opcode, Operand};
 
 pub fn lower_labels(module: Vec<FuncBody>) -> Vec<FuncBody> {
     let mut label_map = HashMap::new();
@@ -11,6 +11,10 @@ pub fn lower_labels(module: Vec<FuncBody>) -> Vec<FuncBody> {
                 label_map.insert(l, pc);
             }
             FuncBody::Instruction(i) => {
+                if i.opcode == Opcode::Brc {
+                    pc += 3;
+                    continue;
+                }
                 pc += i.operands.iter().fold(1, |acc, op| match op {
                     Operand::Label(_) | Operand::Immediate(_) | Operand::Address(_) => acc + 1,
                     _ => acc,
