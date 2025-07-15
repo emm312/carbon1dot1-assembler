@@ -10,15 +10,14 @@ pub enum Opcode {
     Adr,
     Neg,
     Sub,
-    EMPTY,
+    Bsb,
     Cmp,
     Bor,
     And,
     Xor,
     Bsl,
     Bsr,
-    Lia,
-    Lir,
+    Lim,
     Rst,
     Rld,
     Mst,
@@ -30,9 +29,11 @@ pub enum Opcode {
     Psh,
     Pop,
     Pst,
+    Psi,
     Pld,
+    Prd,
     Hlt,
-    Ics
+    Fls
 }
 
 #[repr(u8)]

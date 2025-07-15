@@ -1,4 +1,4 @@
-LIR R3 0 // X
+LIM R3 0 // X
 PLD $0
 RST R1 // Slope
 PLD $1
