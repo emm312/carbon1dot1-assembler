@@ -17,7 +17,7 @@ pub enum Opcode {
     Xor,
     Bsl,
     Bsr,
-    Lim,
+    Lim = 0b01111,
     Rst,
     Rld,
     Mst,
