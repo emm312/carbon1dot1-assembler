@@ -36,8 +36,15 @@ fn main() {
     //        .join("\n")
     //);
     let assembled = assemble(lowered);
-    let mut f = std::fs::File::create(args.output_file)
-        .expect("Failed to open  the output file.");
-    f.write_all(&assembled).unwrap();
+    let mut f = std::fs::File::create(args.output_file).expect("Failed to open  the output file.");
+    f.write_all(
+        &assembled
+            .iter()
+            .map(|e| format!("{:08b}", e))
+            .collect::<Vec<String>>()
+            .join("\n")
+            .as_bytes(),
+    )
+    .unwrap();
     //romgen::generate_schem(&mut f, &assembled, 256).unwrap();
 }

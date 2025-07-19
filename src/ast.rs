@@ -33,7 +33,7 @@ pub enum Opcode {
     Pld,
     Prd,
     Hlt,
-    Fls
+    Fls,
 }
 
 #[repr(u8)]

@@ -18,7 +18,7 @@ pub fn assemble(instrs: Vec<FuncBody>) -> Vec<u8> {
                                 ret.push(a);
                             } else {
                                 ret.push((a as f32 / 128.).floor() as u8);
-                                ret.push(a % 128-2);
+                                ret.push(a % 128 - 2);
                             }
                         }
                         Operand::Condition(c) => {
@@ -41,7 +41,7 @@ pub fn assemble(instrs: Vec<FuncBody>) -> Vec<u8> {
             FuncBody::Data(d) => {
                 ret.extend(d);
             }
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
     ret
