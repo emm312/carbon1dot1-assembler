@@ -249,10 +249,11 @@ ADD R2
 ADD R2
 ADD R2
 ADD R2
-
-
-
-
+ADD R2
+ADD R2
+ADD R2
+ADD R2
+ADD R2
 
 .loop
 BRC JMP .loop
