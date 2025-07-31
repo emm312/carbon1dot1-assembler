@@ -10,15 +10,23 @@ pub fn assemble(instrs: Vec<FuncBody>) -> Vec<u8> {
                 for operand in instr.operands {
                     match operand {
                         Operand::Immediate(a) => {
-                            if instr.opcode != Opcode::Brc {
-                                if !pushed_opword {
+                            match instr.opcode {
+                                Opcode::Brc => {
+                                    ret.push(a >> 7);
+                                    ret.push(a & 0b0111_1111);
+                                }
+                                Opcode::Bsl | Opcode::Bsr => {
+                                    word |= a;
+                                    pushed_opword = true;
                                     ret.push(word);
                                 }
-                                pushed_opword = true;
-                                ret.push(a);
-                            } else {
-                                ret.push(a >> 7);
-                                ret.push(a & 0b0111_1111);
+                                _ => {
+                                    if !pushed_opword {
+                                        ret.push(word);
+                                    }
+                                    pushed_opword = true;
+                                    ret.push(a);
+                                }
                             }
                         }
                         Operand::Condition(c) => {

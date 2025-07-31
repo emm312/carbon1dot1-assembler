@@ -70,13 +70,8 @@ pub fn disassemble(binary_data: &[u8]) -> Vec<String> {
                 instruction.push_str(&format!(" r{}", operand_bits));
             }
             Opcode::Bsl | Opcode::Bsr => {
-                // Register operand, check for immediate (shift amount)
-                instruction.push_str(&format!(" r{}", operand_bits));
-                if pc < binary_data.len() && has_immediate_operand(&binary_data, start_pc) {
-                    let immediate = binary_data[pc];
-                    instruction.push_str(&format!(" {:#x}", immediate));
-                    pc += 1;
-                }
+                // Immediate operand (shift amount) stored in operand_bits
+                instruction.push_str(&format!(" {}", operand_bits));
             }
             Opcode::Lim => {
                 // Register + immediate
