@@ -1,0 +1,3 @@
+
+.loop
+BRC JMP .loop

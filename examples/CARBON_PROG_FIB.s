@@ -1,0 +1,11 @@
+LIM R0 0
+LIM R2 1
+.loop
+ADD R2
+PST $0
+ADR R2
+RST R3
+RLD R2
+PST $0
+RLD R3
+BRC JMP .loop

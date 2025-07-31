@@ -17,8 +17,8 @@ pub fn assemble(instrs: Vec<FuncBody>) -> Vec<u8> {
                                 pushed_opword = true;
                                 ret.push(a);
                             } else {
-                                ret.push((a as f32 / 128.).floor() as u8);
-                                ret.push(a % 128 - 2);
+                                ret.push(a >> 7);
+                                ret.push(a & 0b0111_1111);
                             }
                         }
                         Operand::Condition(c) => {
