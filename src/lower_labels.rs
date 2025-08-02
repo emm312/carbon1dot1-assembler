@@ -15,10 +15,24 @@ pub fn lower_labels(module: Vec<FuncBody>) -> Vec<FuncBody> {
                     pc += 3;
                     continue;
                 }
-                pc += i.operands.iter().fold(1, |acc, op| match op {
-                    Operand::Label(_) | Operand::Immediate(_) | Operand::Address(_) => acc + 1,
-                    _ => acc,
-                });
+                
+                // Start with 1 byte for the instruction word
+                let mut size = 1;
+                
+                // Check if any operand requires additional bytes
+                for operand in &i.operands {
+                    match operand {
+                        Operand::Immediate(_) | Operand::Label(_) => {
+                            // Immediate values and labels (which become immediates) add 1 byte
+                            // but only for non-BRC instructions
+                            size += 1;
+                        }
+                        Operand::Register(_) | Operand::Condition(_) | Operand::Address(_) => {
+                            // These are encoded in the instruction word bits, no extra bytes
+                        }
+                    }
+                }
+                pc += size;
             }
             FuncBody::Data(d) => {
                 pc += d.len() as u8;

@@ -1,5 +1,6 @@
 pub mod assembler;
 pub mod ast;
+pub mod disassembler;
 pub mod lower_labels;
 pub mod name_mangling;
 pub mod parser;
